@@ -1,12 +1,9 @@
 import './app.scss'
 import React, { Component } from 'react';
-import { Ordering } from '../constants';
-import { Filter } from '../utils';
-import FilterComponent from './FilterComponent';
-import OrderingGroupComponent from './OrderingGroupComponent';
 import SearchComponent from './SearchComponent';
-import { Button, Card, Image, Checkbox, Divider } from 'semantic-ui-react'
+import { Button, Card, Image } from 'semantic-ui-react'
 
+// Dummy test data
 let searchFilters = [
     { name: 'Keywords', placeholder: 'Keywords ...', formattedValue: (x => x) },
     { name: 'Category', placeholder: 'Alcohol Type', formattedValue: (x => `@tpcategorie~="${x}"`), advanced: true },
@@ -15,35 +12,55 @@ let searchFilters = [
     { name: 'MaxPrice', type: 'number', placeholder: 'MaxPrice', formattedValue: (x => `@tpprixnum<=${x}`), advanced: true },
 ];
 
+// Dummy test data
 let sortCriterias = [
     { name: 'Relevancy', formattedValue: x => '', disableOrdering: true },
     { name: 'Price', formattedValue: x => `@tpprixnum ${x}` },
     { name: 'Date', formattedValue: x => `@sysdate ${x}` }
 ]
 
+/**
+ * Class to demonstrate teh use of the component
+ * 
+ * @export
+ * @class App
+ * @extends {Component}
+ */
 export default class App extends Component {
-    filters = {};
 
+    /**
+     * 
+     * 
+     * 
+     * @memberOf App
+     */
     componentWillMount() {
-        this.reset();
+        this.setState({ results: [] })
     }
 
-    reset() {
-        this.setState({ results: [], filters: [] })
+    /**
+     * Function called when we have results from the search component
+     * 
+     * @param {any} results
+     * 
+     * @memberOf App
+     */
+    onResults(results) {
+        this.setState({ results: results })
     }
 
-
-    onResults(results){
-            this.setState({
-                results: results
-            })
-    }
-
+    /**
+     * 
+     * 
+     * @returns
+     * 
+     * @memberOf App
+     */
     render() {
         return (
             <div className='app' >
-                <SearchComponent searchFilters={searchFilters} sortCriterias={sortCriterias} onSearch={this.onResults.bind(this)} />
-
+                <SearchComponent searchFilters={searchFilters} sortCriterias={sortCriterias} onResults={this.onResults.bind(this)} />
+                
                 <Card.Group>
                     {this.state.results.map(x => {
                         return <Card

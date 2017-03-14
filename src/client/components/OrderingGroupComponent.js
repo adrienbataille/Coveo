@@ -2,13 +2,36 @@ import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import OrderingComponent from './OrderingComponent';
 
+/**
+ * Class containing the controls to order the search
+ * 
+ * @export
+ * @class OrderingGroupComponent
+ * @extends {Component}
+ */
 export default class OrderingGroupComponent extends Component {
+    /**
+     * Field to hold the different possible sorting criterias for this search
+     * 
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     sortCriterias = {};
+
+    /**
+     *  Set to hold the sort criterias that should not be ordered ascending or descending     * 
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     disableOrdering = new Set();
 
+    /**
+     * Function called when the componet is about to be mounted 
+     * @memberOf OrderingGroupComponent
+     */
     componentWillMount() {
         this.state = {}
-        this.props.sortCriterias.forEach((x => {
+        this.props.sortCriterias.forEach(x => {
             this.sortCriterias[x.name] = x.formattedValue;
             if (x.disableOrdering === true) {
                 this.disableOrdering.add(x.name)
@@ -19,15 +42,26 @@ export default class OrderingGroupComponent extends Component {
                     sortCriteria: this.props.defaultSortCriteria ? this.props.defaultSortCriteria : x.name 
                 }
             }
-        }).bind(this))
+        })
 
         this.updateSortCriteria(this.state.sortCriteria);
     }
 
+    /**
+     * Function called when the sorting criteria is changed
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     onSortCriteriaChanged = (e, { value }) => {
         this.updateSortCriteria(value);
     }
 
+    /**
+     * Function to update the current sorting critera 
+     * @param {any} sortCriteria
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     updateSortCriteria(sortCriteria) {
         this.setState({ sortCriteria: sortCriteria });
         if (this.state.ascending === true) {
@@ -38,6 +72,13 @@ export default class OrderingGroupComponent extends Component {
         }
     }
 
+    /**
+     * Function to upfate the current sorting criteria order
+     * 
+     * @param {any} ascending
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     updateSortCriteriaOrder(ascending) {
         if (ascending === true) {
             this.props.onChange(this.sortCriterias[this.state.sortCriteria]('ascending'));
@@ -47,6 +88,13 @@ export default class OrderingGroupComponent extends Component {
         }
     }
 
+    /**
+     * Function to render the component
+     * 
+     * @returns the rendered component
+     * 
+     * @memberOf OrderingGroupComponent
+     */
     render() {
         return (
             <div>
@@ -60,10 +108,10 @@ export default class OrderingGroupComponent extends Component {
                 <Button
                     disabled={this.disableOrdering.has(this.state.sortCriteria)}
                     icon={this.state.ascending === true ? 'long arrow up' : 'long arrow down'}
-                    onClick={(() => {
+                    onClick={() => {
                         this.setState({ ascending: !this.state.ascending })
                         this.updateSortCriteriaOrder(!this.state.ascending)
-                    }).bind(this)} />
+                    }} />
             </div>
 
         )
