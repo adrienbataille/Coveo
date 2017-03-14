@@ -1,106 +1,48 @@
 import './app.scss'
 import React, { Component } from 'react';
-import { Filters, Ordering } from '../constants';
+import { Ordering } from '../constants';
 import { Filter } from '../utils';
-import { CoveoSearch } from '../service';
 import FilterComponent from './FilterComponent';
 import OrderingGroupComponent from './OrderingGroupComponent';
+import SearchComponent from './SearchComponent';
 import { Button, Card, Image, Checkbox, Divider } from 'semantic-ui-react'
 
+let searchFilters = [
+    { name: 'Keywords', placeholder: 'Keywords ...', formattedValue: (x => x) },
+    { name: 'Category', placeholder: 'Alcohol Type', formattedValue: (x => `@tpcategorie~="${x}"`), advanced: true },
+    { name: 'Country', placeholder: 'Country', formattedValue: (x => `@tppays="${x}"`), advanced: true },
+    { name: 'MinPrice', type: 'number', placeholder: 'MinPrice', formattedValue: (x => `@tpprixnum>=${x}`), advanced: true },
+    { name: 'MaxPrice', type: 'number', placeholder: 'MaxPrice', formattedValue: (x => `@tpprixnum<=${x}`), advanced: true },
+];
+
+let sortCriterias = [
+    { name: 'Relevancy', formattedValue: x => '', disableOrdering: true },
+    { name: 'Price', formattedValue: x => `@tpprixnum ${x}` },
+    { name: 'Date', formattedValue: x => `@sysdate ${x}` }
+]
+
 export default class App extends Component {
-    constructor(props) {
-        super(props);
-        this.filters = {};
-        Filters.Types.forEach(x => {
-            this.filters[x] = new Filter(Filters.FormattedValues.get(x));
-        })
-    }
+    filters = {};
 
     componentWillMount() {
         this.reset();
-    }
-
-    buildQuery() {
-        let query = '';
-        for (let x in this.filters) {
-            if (Filters.FormattedValues.has(x)) {
-                let formattedValue = this.filters[x].getFormattedValue();
-                if (formattedValue) {
-                    query += ` ${formattedValue}`
-                }
-            }
-        }
-        return query;
-    }
-
-    buildSortCriteria() {
-        return (this.state.order && this.state.order.length > 1)
-            ? ` ${this.state.order}`
-            : '';
     }
 
     reset() {
         this.setState({ results: [], filters: [] })
     }
 
-    search(e, value) {
-        var query = this.buildQuery();
-        if (query.length < 1) {
-            this.reset();
-            return;
-        }
 
-        var sortCriteria = this.buildSortCriteria();
-        CoveoSearch.search(query, sortCriteria, (err, res) => {
+    onResults(results){
             this.setState({
-                results: res.body.results,
+                results: results
             })
-        })
-    }
-
-    updateFilter(filterKey, value) {
-        this.filters[filterKey].setValue(value)
     }
 
     render() {
-        let form = null;
-        if (this.state.advancedSearch) {
-            form = (
-                <div>
-                    <FilterComponent
-                        placeholder='Max $'
-                        filterKey={Filters.MaxPrice}
-                        type='number'
-                        onChange={this.updateFilter.bind(this)} />
-                    <FilterComponent
-                        placeholder='Min $'
-                        filterKey={Filters.MinPrice}
-                        type='number'
-                        onChange={this.updateFilter.bind(this)} />
-                    <FilterComponent
-                        placeholder="Type d'alcool"
-                        filterKey={Filters.Category}
-                        onChange={this.updateFilter.bind(this)} />
-                    <FilterComponent
-                        placeholder='Pays'
-                        filterKey={Filters.Country}
-                        onChange={this.updateFilter.bind(this)} />
-                    <OrderingGroupComponent fields={[Ordering.Price, Ordering.Date]} onChange={x => this.setState({ order: x })} />
-                </div>
-            )
-        }
-
         return (
             <div className='app' >
-            <FilterComponent
-                        placeholder='Keywords'
-                        filterKey={Filters.Default}
-                        onChange={this.updateFilter.bind(this)} />
-                {form}
-                <Checkbox label='Advanced' toggle onChange={(event, data) => this.setState({ advancedSearch: data.checked })} />
-                <Button content='Search' onClick={this.search.bind(this)} />
-
-                <Divider />
+                <SearchComponent searchFilters={searchFilters} sortCriterias={sortCriterias} onSearch={this.onResults.bind(this)} />
 
                 <Card.Group>
                     {this.state.results.map(x => {
@@ -114,7 +56,7 @@ export default class App extends Component {
                             </Card.Content>
                             <Card.Content extra>
                                 {x.raw.tpprixnormal}
-                                <Button content="Acheter" as='a' href={x.ClickUri} target='_blank' />
+                                <Button content="Buy" as='a' href={x.ClickUri} target='_blank' />
                             </Card.Content>
                         </Card>
                     })}

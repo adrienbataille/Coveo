@@ -1,40 +1,69 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
-import { Ordering } from '../constants';
 import OrderingComponent from './OrderingComponent';
 
 export default class OrderingGroupComponent extends Component {
-    constructor(props) {
-        super(props)
-        this.state = { ascending: false, value: Ordering.Relevancy }
+    sortCriterias = {};
+    disableOrdering = new Set();
+
+    componentWillMount() {
+        this.state = {}
+        this.props.sortCriterias.forEach((x => {
+            this.sortCriterias[x.name] = x.formattedValue;
+            if (x.disableOrdering === true) {
+                this.disableOrdering.add(x.name)
+            }
+            if (!this.state.sortCriteria) {
+                this.state = { 
+                    ascending: false, 
+                    sortCriteria: this.props.defaultSortCriteria ? this.props.defaultSortCriteria : x.name 
+                }
+            }
+        }).bind(this))
+
+        this.updateSortCriteria(this.state.sortCriteria);
     }
 
-    handleChange = (e, { value }) => {
-        this.setState({ value })
-        this.props.onChange(Ordering.FormattedValues.get(value)(this.state.ascending))
+    onSortCriteriaChanged = (e, { value }) => {
+        this.updateSortCriteria(value);
+    }
+
+    updateSortCriteria(sortCriteria) {
+        this.setState({ sortCriteria: sortCriteria });
+        if (this.state.ascending === true) {
+            this.props.onChange(this.sortCriterias[sortCriteria]('ascending'));
+        }
+        if (this.state.ascending === false) {
+            this.props.onChange(this.sortCriterias[sortCriteria]('descending'));
+        }
+    }
+
+    updateSortCriteriaOrder(ascending) {
+        if (ascending === true) {
+            this.props.onChange(this.sortCriterias[this.state.sortCriteria]('ascending'));
+        }
+        if (ascending === false) {
+            this.props.onChange(this.sortCriterias[this.state.sortCriteria]('descending'));
+        }
     }
 
     render() {
         return (
             <div>
-                <OrderingComponent
-                    name={Ordering.Relevancy}
-                    checked={this.state.value === Ordering.Relevancy}
-                    onChange={this.handleChange.bind(this)} />
-                {this.props.fields.map(x => {
+                {this.props.sortCriterias.map(x => {
                     return <OrderingComponent
-                        key={x}
-                        name={x}
-                        checked={this.state.value === x}
-                        onChange={this.handleChange.bind(this)} />
+                        key={x.name}
+                        name={x.name}
+                        checked={this.state.sortCriteria === x.name}
+                        onChange={this.onSortCriteriaChanged.bind(this)} />
                 })}
                 <Button
-                    disabled={this.state.value === Ordering.Relevancy}
+                    disabled={this.disableOrdering.has(this.state.sortCriteria)}
                     icon={this.state.ascending === true ? 'long arrow up' : 'long arrow down'}
-                    onClick={() => {
+                    onClick={(() => {
                         this.setState({ ascending: !this.state.ascending })
-                        this.props.onChange(Ordering.FormattedValues.get(this.state.value)(!this.state.ascending))
-                    }} />
+                        this.updateSortCriteriaOrder(!this.state.ascending)
+                    }).bind(this)} />
             </div>
 
         )
