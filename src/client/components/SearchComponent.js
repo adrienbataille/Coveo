@@ -1,4 +1,3 @@
-import './app.scss'
 import React, { Component } from 'react';
 import { Filters, Ordering } from '../constants';
 import { Filter } from '../utils';
@@ -7,10 +6,11 @@ import FilterComponent from './FilterComponent';
 import OrderingGroupComponent from './OrderingGroupComponent';
 import { Button, Card, Image, Checkbox, Divider } from 'semantic-ui-react'
 
-export default class App extends Component {
+export default class SearchComponent extends Component {
     constructor(props) {
         super(props);
         this.filters = {};
+        this.order = '';
         Filters.Types.forEach(x => {
             this.filters[x] = new Filter(Filters.FormattedValues.get(x));
         })
@@ -89,13 +89,18 @@ export default class App extends Component {
                 </div>
             )
         }
+        else {
+            form = (
+                <div>
+                    <FilterComponent
+                        placeholder='Search'
+                        filterKey={Filters.Default}
+                        onChange={this.updateFilter.bind(this)} />
+                </div>)
+        }
 
         return (
             <div className='app' >
-            <FilterComponent
-                        placeholder='Keywords'
-                        filterKey={Filters.Default}
-                        onChange={this.updateFilter.bind(this)} />
                 {form}
                 <Checkbox label='Advanced' toggle onChange={(event, data) => this.setState({ advancedSearch: data.checked })} />
                 <Button content='Search' onClick={this.search.bind(this)} />

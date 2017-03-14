@@ -18,7 +18,7 @@ class Filters {
     FormattedValues = new Map([
         [this.Default, x => x],
         [this.Category, x => `@tpcategorie~="${x}"`],
-        [this.Country, x => `@tppays~="${x}"`],
+        [this.Country, x => `@tppays="${x}"`],
         [this.MinPrice, x => `@tpprixnum>=${x}`],
         [this.MaxPrice, x => `@tpprixnum<=${x}`],
         [this.BottleFormat, x => `@tpformat=${x}`]
