@@ -149,3 +149,9 @@ export default class SearchComponent extends Component {
         );
     }
 }
+
+SearchComponent.propTypes = {
+  searchFilters: React.PropTypes.array.isRequired,
+  onResults: React.PropTypes.func.isRequired,
+  sortCriterias: React.PropTypes.array.isRequired
+};

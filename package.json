@@ -53,11 +53,14 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "enzyme": "^2.7.1",
     "express": "^4.14.1",
     "morgan": "^1.8.1",
     "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-router": "^4.0.0",
+    "react-test-renderer": "^15.4.2",
     "semantic-ui-react": "^0.64.4",
     "superagent": "^3.4.1"
   },

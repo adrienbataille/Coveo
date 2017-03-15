@@ -36,8 +36,11 @@ export default class Filter {
      * @memberOf Filter
      */
     getFormattedValue() {
-        if (this.value && this.value.length > 0) {
-            return this.format(this.value);
+        if ((this.value && this.value.length > 0)) {
+            if(typeof this.format == 'function'){
+                return this.format(this.value);
+            }
+            return this.value;
         }
         return null;
     }

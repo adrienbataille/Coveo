@@ -117,3 +117,8 @@ export default class OrderingGroupComponent extends Component {
         )
     }
 }
+
+OrderingGroupComponent.propTypes = {
+  onChange: React.PropTypes.func.isRequired,
+  sortCriterias: React.PropTypes.array.isRequired
+};
