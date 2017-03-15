@@ -1,7 +1,7 @@
+import './ordering-group-component.scss';
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import OrderingComponent from './OrderingComponent';
-
 /**
  * Class containing the controls to order the search
  * 
@@ -37,9 +37,9 @@ export default class OrderingGroupComponent extends Component {
                 this.disableOrdering.add(x.name)
             }
             if (!this.state.sortCriteria) {
-                this.state = { 
-                    ascending: false, 
-                    sortCriteria: this.props.defaultSortCriteria ? this.props.defaultSortCriteria : x.name 
+                this.state = {
+                    ascending: false,
+                    sortCriteria: this.props.defaultSortCriteria ? this.props.defaultSortCriteria : x.name
                 }
             }
         })
@@ -97,15 +97,18 @@ export default class OrderingGroupComponent extends Component {
      */
     render() {
         return (
-            <div>
+            <div className='ordering-group-component'>
                 {this.props.sortCriterias.map(x => {
                     return <OrderingComponent
+                        className='ordering-component'
                         key={x.name}
                         name={x.name}
                         checked={this.state.sortCriteria === x.name}
                         onChange={this.onSortCriteriaChanged.bind(this)} />
                 })}
                 <Button
+                    compact
+                    color='teal'
                     disabled={this.disableOrdering.has(this.state.sortCriteria)}
                     icon={this.state.ascending === true ? 'long arrow up' : 'long arrow down'}
                     onClick={() => {
@@ -119,6 +122,6 @@ export default class OrderingGroupComponent extends Component {
 }
 
 OrderingGroupComponent.propTypes = {
-  onChange: React.PropTypes.func.isRequired,
-  sortCriterias: React.PropTypes.array.isRequired
+    onChange: React.PropTypes.func.isRequired,
+    sortCriterias: React.PropTypes.array.isRequired
 };

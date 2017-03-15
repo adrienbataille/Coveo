@@ -32,6 +32,7 @@ export default class FilterComponent extends Component {
         return (
             <Input placeholder={this.props.placeholder}
                 type={this.props.type ? this.props.type : 'text'}
-                onChange={this.onInputChanged.bind(this)} />)
+                onChange={this.onInputChanged.bind(this)}
+                className={this.props.className} />)
     }
 }

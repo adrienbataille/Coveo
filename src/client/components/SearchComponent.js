@@ -1,9 +1,9 @@
-import './app.scss'
+import './search-component.scss'
 import { Filter } from '../utils';
 import React, { Component } from 'react';
 import { CoveoSearch } from '../service';
 import FilterComponent from './FilterComponent';
-import { Button, Checkbox } from 'semantic-ui-react';
+import { Container, Button, Checkbox } from 'semantic-ui-react';
 import OrderingGroupComponent from './OrderingGroupComponent';
 
 /**
@@ -21,7 +21,7 @@ export default class SearchComponent extends Component {
      * @memberOf SearchComponent
      */
     filters = {};
-    
+
     /**
      * State of the search component
      * holds the flag for the advanced search 
@@ -126,32 +126,34 @@ export default class SearchComponent extends Component {
      */
     render() {
         return (
-            <div>
+            <div className='search-component'>
                 {this.props.searchFilters.map(x => {
                     if (x.advanced !== true || this.state.advancedSearch === true) {
                         return (
-                            <div key={x.name}>
-                                <FilterComponent
-                                    placeholder={x.placeholder}
-                                    filterKey={x.name}
-                                    type={x.type}
-                                    onChange={this.updateFilter.bind(this)} />
-                            </div>)
+                            <FilterComponent
+                                className={`filter-component ${x.advanced ? 'advanced' : ''}`}
+                                key={x.name}
+                                placeholder={x.placeholder}
+                                filterKey={x.name}
+                                type={x.type}
+                                onChange={this.updateFilter.bind(this)} />)
                     }
                     return null;
                 })}
-                <Checkbox label='Advanced' toggle onChange={this.onAdvancedSearchCheckChange.bind(this)} />
                 <div>
-                    <Button content='Search' onClick={this.onSearch.bind(this)} />
+                    <OrderingGroupComponent onChange={this.updateSortCriteria.bind(this)} sortCriterias={this.props.sortCriterias} />
                 </div>
-                <OrderingGroupComponent onChange={this.updateSortCriteria.bind(this)} sortCriterias={this.props.sortCriterias} />
+                <div>
+                    <Button fluid content='Search' color='teal' onClick={this.onSearch.bind(this)} />
+                </div>
+                <Checkbox className='checkbox' label='Advanced Search' slider onChange={this.onAdvancedSearchCheckChange.bind(this)} />
             </div>
         );
     }
 }
 
 SearchComponent.propTypes = {
-  searchFilters: React.PropTypes.array.isRequired,
-  onResults: React.PropTypes.func.isRequired,
-  sortCriterias: React.PropTypes.array.isRequired
+    searchFilters: React.PropTypes.array.isRequired,
+    onResults: React.PropTypes.func.isRequired,
+    sortCriterias: React.PropTypes.array.isRequired
 };

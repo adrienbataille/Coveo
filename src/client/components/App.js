@@ -60,24 +60,26 @@ export default class App extends Component {
         return (
             <div className='app' >
                 <SearchComponent searchFilters={searchFilters} sortCriterias={sortCriterias} onResults={this.onResults.bind(this)} />
-                
-                <Card.Group>
-                    {this.state.results.map(x => {
-                        return <Card
-                            key={x.raw.tpcodesaq}>
-                            <Image src={x.raw.tpthumbnailuri} />
-                            <Card.Content>
-                                <Card.Header>{x.title}</Card.Header>
-                                <Card.Meta>{x.raw.tpcategorie}</Card.Meta>
-                                <Card.Description>{x.raw.tppays}</Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                {x.raw.tpprixnormal}
-                                <Button content="Buy" as='a' href={x.ClickUri} target='_blank' />
-                            </Card.Content>
-                        </Card>
-                    })}
-                </Card.Group>
+
+                <div>
+                    <Card.Group className='result-view'>
+                        {this.state.results.map(x => {
+                            return <Card
+                                key={x.raw.tpcodesaq}>
+                                <Image src={x.raw.tpthumbnailuri} />
+                                <Card.Content>
+                                    <Card.Header>{x.title}</Card.Header>
+                                    <Card.Meta>{x.raw.tpcategorie}</Card.Meta>
+                                    <Card.Description>{x.raw.tppays}</Card.Description>
+                                </Card.Content>
+                                <Card.Content extra>
+                                    {x.raw.tpprixnormal}
+                                    <Button content="Buy" as='a' href={x.ClickUri} target='_blank' />
+                                </Card.Content>
+                            </Card>
+                        })}
+                    </Card.Group>
+                </div>
             </div >
         );
     }

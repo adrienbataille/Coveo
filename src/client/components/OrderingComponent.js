@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Radio } from 'semantic-ui-react'
+import { Radio } from 'semantic-ui-react'
 
 /**
  * Class representing an ordering component
@@ -22,6 +22,7 @@ export default class OrderingComponent extends Component {
             name={this.props.name}
             value={this.props.name}
             checked={this.props.checked}
-            onChange={this.props.onChange} />
+            onChange={this.props.onChange}
+            className={this.props.className} />
     }
 }

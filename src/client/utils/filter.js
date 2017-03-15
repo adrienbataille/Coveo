@@ -37,7 +37,7 @@ export default class Filter {
      */
     getFormattedValue() {
         if ((this.value && this.value.length > 0)) {
-            if(typeof this.format == 'function'){
+            if(typeof this.format === 'function'){
                 return this.format(this.value);
             }
             return this.value;

@@ -1,0 +1,15 @@
+.search-component{
+    background: lightslategrey;
+    border-radius: 2em;
+    display: inline-block;
+    margin: 2em;
+    padding: 3em;
+    .filter-component {
+        display: inline-block;
+        margin: 0.2em
+    }
+        .checkbox{
+        margin-top: 2em;
+        align-self: center;
+        }
+}

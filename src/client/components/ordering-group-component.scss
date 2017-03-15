@@ -1,0 +1,8 @@
+.ordering-group-component{
+    display: inline-block;
+    margin: 2em;
+    .ordering-component {
+        display: inline-block;
+        margin: 0.5em
+    }
+}
